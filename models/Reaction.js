@@ -14,6 +14,10 @@ const reactionSchema = new Schema(
       required: true,
       maxlength: 280,
     },
+    // Date
+    // Set default value to the current timestamp
+    // Use a getter method to format the timestamp on query
+    // Schema Settings:
     createdAt: {
       type: Date,
       default: Date.now,
@@ -28,21 +32,6 @@ const reactionSchema = new Schema(
     },
   }
 );
-module.exports = reactionSchema;
-// reactionBody
-
-// String
-// Required
-// 280 character maximum
-// username
-
-// String
-// Required
-// createdAt
-
-// Date
-// Set default value to the current timestamp
-// Use a getter method to format the timestamp on query
-// Schema Settings:
+module.exports = { reactionSchema };
 
 // This will not be a model, but rather will be used as the reaction field's subdocument schema in the Thought model.
