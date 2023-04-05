@@ -1,15 +1,39 @@
+const { Schema, model } = require('mongoose');
+const { Thought } = require('./Thought');
+
 // username
 
 // String
 // Unique
 // Required
 // Trimmed
-// email
+const userSchema = new Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    maxlength: 15,
+  },
+  // email
 
-// String
-// Required
-// Unique
-// Must match a valid email address (look into Mongoose's matching validation)
+  // String
+  // Required
+  // Unique
+  // Must match a valid email address (look into Mongoose's matching validation)
+  email: {
+    unique: true,
+    required: true,
+    trim: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please fill a valid email address'],
+  },
+  thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
+  friends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
+});
+
+userSchema.virtual('friendCount').get(() => this.friends.length);
+
+const User = model('user', userSchema);
 // thoughts
 
 // Array of _id values referencing the Thought model
