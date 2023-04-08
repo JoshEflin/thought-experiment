@@ -1,9 +1,7 @@
 const router = require('express').Router();
-const { User, Thought, Reaction } = require('../models');
+const { User, Thought } = require('../models');
+const apiRoutes = require('./api');
 
-router.get('/', (req, res) => {
-  User.find()
-    .then((users) => res.json(users))
-    .catch((err) => res.status(500).json(err));
-});
+router.use('/api', apiRoutes);
+
 module.exports = router;
