@@ -12,8 +12,8 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      get(v) {
-        const date = Date(v);
+      get: (v) => {
+        const date = new Date(v);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -21,7 +21,7 @@ const thoughtSchema = new Schema(
         return `${year}-${month}-${day} ${hours}`;
       },
     },
-    userName: {
+    username: {
       type: String,
       required: true,
     },
@@ -39,7 +39,7 @@ const thoughtSchema = new Schema(
 
 thoughtSchema
   .virtual('reactionCount')
-  .get(() => (!this.reactions ? this.reactions.length : 0));
+  .get(() => (this.reactions ? this.reactions.length : 0));
 
 const Thought = model('thought', thoughtSchema);
 

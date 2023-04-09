@@ -104,17 +104,25 @@ router.post('/:id/:friendID', async (req, res) => {
 });
 
 router.delete('/:id/:friendID', async (req, res) => {
-  const deleteFriend = User.findOneAndUpdate(
-    {
-      _id: ObjectId(req.params.id),
-    },
-    {
-      $pull: { friends: { $in: ObjectId(req.params.friendID) } },
-    },
-    {
-      new: true,
-    }
-  );
-  console.log(deleteFriend);
+  try {
+    const deleteFriend = await User.findOneAndUpdate(
+      {
+        _id: ObjectId(req.params.id),
+      },
+      {
+        $pull: { friends: ObjectId(req.params.friendID) },
+      },
+      {
+        new: false,
+      }
+    );
+    console.log(deleteFriend);
+    res.json(deleteFriend);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json(e, {
+      message: 'nope',
+    });
+  }
 });
 module.exports = router;
