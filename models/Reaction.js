@@ -5,7 +5,7 @@ const reactionSchema = new Schema(
   // Use Mongoose's ObjectId data type
   // Default value is set to a new ObjectId
   {
-    reactionID: {
+    reactionId: {
       type: Schema.Types.ObjectId,
       default: () => new Types.ObjectId(),
     },
@@ -22,7 +22,7 @@ const reactionSchema = new Schema(
       type: Date,
       default: Date.now,
       get(v) {
-        const date = Date(v);
+        const date = new Date(v);
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const day = String(date.getDate()).padStart(2, '0');
@@ -32,6 +32,6 @@ const reactionSchema = new Schema(
     },
   }
 );
-module.exports = { reactionSchema };
+module.exports = reactionSchema;
 
 // This will not be a model, but rather will be used as the reaction field's subdocument schema in the Thought model.

@@ -5,10 +5,13 @@ const { User, Thought } = require('../../models');
 // finds all users
 router.get('/', async (req, res) => {
   try {
-    const users = await User.find().populate({
-      path: 'friends',
-      select: '-__v',
-    });
+    const users = await User.find().populate('friends').populate('thoughts');
+    // .populate
+    //   {
+    //   path: 'reaction',
+    //   populate: { path: 'thought' },
+    //   select: '-__v',
+    // }
     console.log(users);
     if (users) {
       res.status(200).json(users);

@@ -32,7 +32,7 @@ const userSchema = new Schema(
         'Please fill a valid email address',
       ],
     },
-    thoughts: [{ type: Schema.Types.ObjectId, ref: 'thought' }],
+    thoughts: [{ type: Schema.Types.ObjectId, ref: 'thoughts' }],
     friends: [{ type: Schema.Types.ObjectId, ref: 'user' }],
   },
   {
