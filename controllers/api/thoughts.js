@@ -27,6 +27,17 @@ router.post('/', async (req, res) => {
       thoughtText: data.thoughtText,
       username: data.username,
     });
+    const addToUser = await User.findOneAndUpdate(
+      {
+        username: req.body.username,
+      },
+      {
+        $addToSet: {
+          thoughts: newThought._id,
+        },
+      }
+    );
+
     res.status(200).json(newThought);
   } catch (e) {
     console.log(e);
