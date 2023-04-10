@@ -4,17 +4,27 @@ const { User, Thought } = require('../../models');
 
 // get thoughts
 router.get('/', async (req, res) => {
-  const thoughts = await Thought.find();
+  try {
+    const thoughts = await Thought.find();
 
-  console.log(thoughts);
-  res.json(thoughts);
+    console.log(thoughts);
+    res.json(thoughts);
+  } catch (e) {
+    res.status(500).json(e, { message: 'no one is using their noggin!' });
+  }
 });
 // get thought by ID
 router.get('/:id', async (req, res) => {
-  const thoughts = await Thought.findOne(ObjectId(req.params.id));
+  try {
+    const thoughts = await Thought.findOne(ObjectId(req.params.id));
 
-  console.log(thoughts);
-  res.json(thoughts);
+    console.log(thoughts);
+    res.json(thoughts);
+  } catch (e) {
+    res
+      .status(500)
+      .json(e, { message: 'Not a creature was stirring, not even a thought' });
+  }
 });
 
 // new thought
@@ -46,34 +56,62 @@ router.post('/', async (req, res) => {
 });
 // update thought
 router.put('/:id', async (req, res) => {
-  console.log(req.body);
-  const updatedthought = await Thought.findOneAndUpdate(
-    {
-      _id: ObjectId(req.params.id),
-    },
-    {
-      thoughtText: req.body.thoughtText,
-    }
-  );
-  res.json(updatedthought);
+  try {
+    const updatedthought = await Thought.findOneAndUpdate(
+      {
+        _id: ObjectId(req.params.id),
+      },
+      {
+        thoughtText: req.body.thoughtText,
+      }
+    );
+    res.json(updatedthought);
+  } catch (e) {
+    res.status(500).json(e, { message: ' stop overthinking' });
+  }
 });
-
-router.post('/reactions/:id/', async (req, res) => {
-  const newReaction = await Thought.findOneAndUpdate(
-    {
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedthought = await Thought.findOneAndDelete({
       _id: ObjectId(req.params.id),
-    },
-    {
-      $addToSet: {
-        reactions: {
-          reactionBody: req.body.reactionBody,
+    });
+    res.json(deletedthought);
+  } catch (e) {
+    res.status(500).json(e, { message: 'whoopsiedaises' });
+  }
+});
+router.post('/reactions/:id/', async (req, res) => {
+  try {
+    const newReaction = await Thought.findOneAndUpdate(
+      {
+        _id: ObjectId(req.params.id),
+      },
+      {
+        $addToSet: {
+          reactions: {
+            reactionBody: req.body.reactionBody,
+          },
         },
       },
-    },
-    {
-      new: true,
-    }
-  );
-  res.json(newReaction);
+      {
+        new: true,
+      }
+    );
+    res.json(newReaction);
+  } catch (e) {
+    res.status(500).json(e, { message: ' you left them speechless' });
+  }
+});
+router.delete('/:id/reactions/:reactionId', async (req, res) => {
+  try {
+    const deletedReaction = await Thought.findByIdAndUpdate(
+      { _id: ObjectId(req.params.id) },
+      {
+        $pull: { reactions: { _id: req.params.reactionId } },
+      }
+    );
+  } catch (e) {
+    res.status(500).json(e, { message: 'no bueno, this route is insane-o' });
+  }
 });
 module.exports = router;

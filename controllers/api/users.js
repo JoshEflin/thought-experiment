@@ -69,7 +69,12 @@ router.post('/', async (req, res) => {
 // delete user
 
 router.delete('/:id', async (req, res) => {
+  // find one get username
   try {
+    const userToDelete = await User.findOne({
+      _id: ObjectId(req.params.id),
+    });
+    await Thought.deleteMany({ _id: { $in: userToDelete.thoughts } });
     const deleted = await User.deleteOne({
       _id: ObjectId(req.params.id),
     });
@@ -85,14 +90,14 @@ router.delete('/:id', async (req, res) => {
 // FRIEND related routes
 
 // new friend
-router.post('/:id/:friendID', async (req, res) => {
+router.post('/:id/:friendId', async (req, res) => {
   try {
     const newFriend = await User.findOneAndUpdate(
       {
         _id: ObjectId(req.params.id),
       },
       {
-        $addToSet: { friends: ObjectId(req.params.friendID) },
+        $addToSet: { friends: ObjectId(req.params.friendId) },
       },
       {
         new: true,
