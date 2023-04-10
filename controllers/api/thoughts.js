@@ -107,9 +107,10 @@ router.delete('/:id/reactions/:reactionId', async (req, res) => {
     const deletedReaction = await Thought.findByIdAndUpdate(
       { _id: ObjectId(req.params.id) },
       {
-        $pull: { reactions: { _id: req.params.reactionId } },
+        $pull: { reactions: { reactionId: req.params.reactionId } },
       }
     );
+    res.json(deletedReaction);
   } catch (e) {
     res.status(500).json(e, { message: 'no bueno, this route is insane-o' });
   }

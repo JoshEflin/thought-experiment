@@ -27,7 +27,9 @@ router.get('/:id', async (req, res) => {
     const user = await User.find(
       { _id: ObjectId(req.params.id) }
       // || { username: `${req.params.id}` }
-    );
+    )
+      .populate('friends')
+      .populate('thoughts');
 
     res.status(200).json(user);
   } catch (e) {
@@ -111,14 +113,14 @@ router.post('/:id/:friendId', async (req, res) => {
   }
 });
 
-router.delete('/:id/:friendID', async (req, res) => {
+router.delete('/:id/:friendId', async (req, res) => {
   try {
     const deleteFriend = await User.findOneAndUpdate(
       {
         _id: ObjectId(req.params.id),
       },
       {
-        $pull: { friends: ObjectId(req.params.friendID) },
+        $pull: { friends: ObjectId(req.params.friendId) },
       },
       {
         new: false,
