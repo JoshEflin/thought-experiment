@@ -6,12 +6,6 @@ const { User, Thought } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const users = await User.find().populate('friends').populate('thoughts');
-    // .populate
-    //   {
-    //   path: 'reaction',
-    //   populate: { path: 'thought' },
-    //   select: '-__v',
-    // }
     console.log(users);
     if (users) {
       res.status(200).json(users);
@@ -24,10 +18,7 @@ router.get('/', async (req, res) => {
 // finds single user
 router.get('/:id', async (req, res) => {
   try {
-    const user = await User.find(
-      { _id: ObjectId(req.params.id) }
-      // || { username: `${req.params.id}` }
-    )
+    const user = await User.find({ _id: ObjectId(req.params.id) })
       .populate('friends')
       .populate('thoughts');
 
